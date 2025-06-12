@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Special Eid Dinner at C Mess</title>
+    <!-- Chosen Palette: Golden Lantern (Deep Cream, Rich Maroon, Gold/Mustard Accents) -->
+    <!-- Application Structure Plan: The application is structured as a single-page, scrolling digital invitation. It begins with a grand visual hero section to set a festive tone. This is followed by a clear details section for date and venue. The core of the app is an interactive menu using clickable cards that reveal modals with more information about each dish. This structure was chosen to transform the static text of the brochure into an engaging and memorable user experience, enhancing the celebratory feel of the event rather than just presenting information. The flow is simple and linear, guiding the user from the announcement to exploring the menu and finally to a warm closing message. -->
+    <!-- Visualization & Content Choices: Report Info: Event Menu -> Goal: Inform & Engage -> Viz/Presentation: Interactive Cards with Modals -> Interaction: On-click, a modal appears with a dish image and description -> Justification: This interactive method is far more engaging than a static list. It encourages user exploration, adds a "wow" factor suitable for a special event, and makes the menu feel more luxurious. The implementation uses HTML, Tailwind CSS, and Vanilla JS, with placeholder images for dishes, avoiding any charts, SVG, or Mermaid JS as they are not needed for this type of content. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #FDF8F0;
+            color: #4A2E30;
+            font-family: 'Lato', sans-serif;
+        }
+        .font-heading {
+            font-family: 'Playfair Display', serif;
+        }
+        .hero-bg {
+            background-color: #4A2E30;
+            background-image: radial-gradient(circle at top right, rgba(217, 160, 79, 0.3), transparent 40%),
+                              radial-gradient(circle at bottom left, rgba(217, 160, 79, 0.3), transparent 40%);
+        }
+        .text-gold {
+            color: #D9A04F;
+        }
+        .bg-maroon {
+            background-color: #4A2E30;
+        }
+        .border-gold {
+            border-color: #D9A04F;
+        }
+        .menu-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        .menu-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0s 0.3s;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            background-color: #FDF8F0;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            max-width: 500px;
+            width: 90%;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="hero-bg text-white h-screen flex flex-col items-center justify-center text-center p-4">
+        <div class="animate-fade-in-down">
+            <h1 class="font-heading text-5xl md:text-8xl font-black">
+                Special Eid Dinner
+            </h1>
+            <p class="text-xl md:text-2xl mt-4 text-gold">An evening of celebration & fine dining</p>
+        </div>
+    </header>
+
+    <main>
+        <section id="invitation" class="py-16 md:py-24">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="font-heading text-4xl md:text-5xl">You are Invited</h2>
+                <p class="mt-4 text-lg max-w-2xl mx-auto text-gray-700">Join us for a festive celebration and a delightful culinary experience, thoughtfully curated for this special occasion.</p>
+                <div class="mt-12 flex flex-col md:flex-row justify-center items-center gap-8 md:gap-16">
+                    <div class="text-center">
+                        <p class="text-4xl">🗓️</p>
+                        <h3 class="font-bold text-xl mt-2">Date</h3>
+                        <p class="text-lg text-gray-600">13/06/25 (Friday)</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-4xl">📍</p>
+                        <h3 class="font-bold text-xl mt-2">Venue</h3>
+                        <p class="text-lg text-gray-600">C Mess</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-4xl">💰</p>
+                        <h3 class="font-bold text-xl mt-2">Guest Charges</h3>
+                        <p class="text-lg text-gray-600">Non-Veg: <span class="text-gold font-bold">225</span></p>
+                        <p class="text-lg text-gray-600">Veg: <span class="text-gold font-bold">190</span></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="menu" class="bg-maroon text-white py-16 md:py-24">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="font-heading text-4xl md:text-5xl">Dinner Menu Highlights</h2>
+                    <p class="mt-2 text-lg text-gray-300">Click on an item to see more</p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                    
+                    <div class="menu-card bg-white/10 p-6 rounded-lg text-center" data-modal-target="modal-drink">
+                        <h3 class="font-heading text-2xl text-gold">Welcome Drink</h3>
+                        <p class="mt-2 text-gray-300">A refreshing start to your celebratory meal.</p>
+                    </div>
+
+                    <div class="menu-card bg-white/10 p-6 rounded-lg text-center" data-modal-target="modal-soup">
+                        <h3 class="font-heading text-2xl text-gold">Tomato Shorba</h3>
+                        <p class="mt-2 text-gray-300">A warm and comforting soup to awaken your palate.</p>
+                    </div>
+
+                    <div class="menu-card bg-white/10 p-6 rounded-lg text-center" data-modal-target="modal-biriyani">
+                        <h3 class="font-heading text-2xl text-gold">Chicken Biriyani</h3>
+                        <p class="mt-2 text-gray-300">The star of our dinner – aromatic and flavorful.</p>
+                    </div>
+
+                    <div class="menu-card bg-white/10 p-6 rounded-lg text-center" data-modal-target="modal-payasam">
+                        <h3 class="font-heading text-2xl text-gold">Payasam</h3>
+                        <p class="mt-2 text-gray-300">A traditional, sweet indulgence to complete your feast.</p>
+                    </div>
+                    
+                    <div class="menu-card bg-white/10 p-6 rounded-lg text-center sm:col-span-2 lg:col-span-1 lg:col-start-2" data-modal-target="modal-others">
+                        <h3 class="font-heading text-2xl text-gold">Friday Favourites</h3>
+                        <p class="mt-2 text-gray-300">Enjoy all your usual favourites from our regular Friday dinner menu!</p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section id="closing" class="py-20 md:py-32">
+            <div class="container mx-auto px-6 text-center">
+                 <p class="text-2xl md:text-3xl font-heading text-gold">✨</p>
+                 <p class="mt-4 text-xl md:text-2xl max-w-3xl mx-auto text-gray-800">
+                    A warm invitation to celebrate Eid with us, filled with good food and cherished company!
+                 </p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-maroon py-6">
+        <div class="container mx-auto px-6 text-center text-gray-400">
+            <p>with regards from C Mess committee</p>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <div id="modal-drink" class="modal-overlay">
+        <div class="modal-content text-center">
+            <img src="https://placehold.co/400x250/d9a04f/4A2E30?text=Welcome+Drink" alt="Welcome Drink" class="rounded-md mx-auto mb-4">
+            <h3 class="font-heading text-3xl text-gold">Welcome Drink</h3>
+            <p class="mt-2 text-gray-700">Begin your feast with a splash of refreshment. Our specially prepared welcome drink is designed to cleanse your palate and set a delightful tone for the evening's culinary journey.</p>
+            <button class="modal-close mt-6 bg-maroon text-white px-6 py-2 rounded-md">Close</button>
+        </div>
+    </div>
+    <div id="modal-soup" class="modal-overlay">
+        <div class="modal-content text-center">
+            <img src="https://placehold.co/400x250/d9a04f/4A2E30?text=Tomato+Shorba" alt="Tomato Shorba" class="rounded-md mx-auto mb-4">
+            <h3 class="font-heading text-3xl text-gold">Tomato Shorba</h3>
+            <p class="mt-2 text-gray-700">A velvety and aromatic soup, rich with the flavor of ripe tomatoes and infused with a delicate blend of Indian spices. It's the perfect, heartwarming prelude to the main course.</p>
+            <button class="modal-close mt-6 bg-maroon text-white px-6 py-2 rounded-md">Close</button>
+        </div>
+    </div>
+    <div id="modal-biriyani" class="modal-overlay">
+        <div class="modal-content text-center">
+            <img src="https://placehold.co/400x250/d9a04f/4A2E30?text=Chicken+Biriyani" alt="Chicken Biriyani" class="rounded-md mx-auto mb-4">
+            <h3 class="font-heading text-3xl text-gold">Chicken Biriyani</h3>
+            <p class="mt-2 text-gray-700">The crown jewel of our Eid feast. Succulent pieces of chicken marinated in spices and layered with fragrant, long-grain basmati rice, slow-cooked to perfection. An unforgettable experience.</p>
+            <button class="modal-close mt-6 bg-maroon text-white px-6 py-2 rounded-md">Close</button>
+        </div>
+    </div>
+    <div id="modal-payasam" class="modal-overlay">
+        <div class="modal-content text-center">
+            <img src="https://placehold.co/400x250/d9a04f/4A2E30?text=Payasam" alt="Payasam" class="rounded-md mx-auto mb-4">
+            <h3 class="font-heading text-3xl text-gold">Payasam</h3>
+            <p class="mt-2 text-gray-700">End your meal on a sweet note with this classic South Indian dessert. A creamy, slow-simmered pudding, delicately flavored with cardamom and garnished with nuts for a truly indulgent finish.</p>
+            <button class="modal-close mt-6 bg-maroon text-white px-6 py-2 rounded-md">Close</button>
+        </div>
+    </div>
+     <div id="modal-others" class="modal-overlay">
+        <div class="modal-content text-center">
+            <img src="https://placehold.co/400x250/d9a04f/4A2E30?text=More+Delights" alt="More Delights" class="rounded-md mx-auto mb-4">
+            <h3 class="font-heading text-3xl text-gold">And Your Friday Favourites!</h3>
+            <p class="mt-2 text-gray-700">In addition to our Eid specials, the dinner will also feature the complete, delicious spread you know and love from our regular Friday night menu. There's something for everyone to enjoy!</p>
+            <button class="modal-close mt-6 bg-maroon text-white px-6 py-2 rounded-md">Close</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuCards = document.querySelectorAll('[data-modal-target]');
+            const modals = document.querySelectorAll('.modal-overlay');
+            const closeButtons = document.querySelectorAll('.modal-close');
+
+            menuCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const targetModalId = card.getAttribute('data-modal-target');
+                    const targetModal = document.getElementById(targetModalId);
+                    if (targetModal) {
+                        targetModal.classList.add('active');
+                    }
+                });
+            });
+
+            const closeModal = (modal) => {
+                modal.classList.remove('active');
+            };
+
+            closeButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    closeModal(button.closest('.modal-overlay'));
+                });
+            });
+
+            modals.forEach(modal => {
+                modal.addEventListener('click', (event) => {
+                    if (event.target === modal) {
+                        closeModal(modal);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
